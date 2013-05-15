@@ -49,10 +49,13 @@
       _link.on('click', $.proxy(Notification.onClose, this)),
       this.$note.prepend(_link);
     
-    if (!this.options.element)
-      this.$note = this.$note.wrap('<div class="notifications ' + this.options.position.replace(/\s+/, '-') + '"/>').parent(),
+    if (!this.options.element) {
+      this.$note = this.$note.wrap('<div class="notifications ' + this.options.position.replace(/\s+/, '-') + '"/>').parent();
+      if (!this.options.appendTo) {
+          this.options.appendTo = document.body;
+      }
       this.$element = $(this.options.appendTo);
-    else
+    } else
       this.$element = $(this.options.element);
     
     if (this.options.initiallyShown)
@@ -95,15 +98,15 @@
     type: 'success',
     initiallyShown: true,
     position: 'top right',
-    appendTo: document.body,
+    appendTo: null,
     closable: true,
     transition: 'fade',
     fadeOut: {
-      enabled: true,
-      delay: 3000
+        enabled: true,
+        delay: 3000
     },
     message: null,
-    onClose: function () {},
-    onClosed: function () {}
-  }
+    onClose: function() { },
+    onClosed: function() { }
+  };
 })(window.jQuery);
