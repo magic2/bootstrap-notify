@@ -18,12 +18,11 @@
  */
 
 (function ($) {
-  var Notification = function (element, options) {
+  var Notification = function (options) {
     // Element collection
-    this.$element = $(element);
     this.$note    = $('<div class="alert"></div>');
-    this.options  = $.extend(true, {}, $.fn.notify.defaults, options);
-    this._link    = null;
+    this.options  = $.extend(true, {}, $.notify.defaults, options);
+    var _link     = null;
 
     // Setup from options
     if (this.options.transition)
@@ -46,39 +45,57 @@
           this.$note.text(this.options.message.text);
 
     if (this.options.closable)
-      this._link = $('<a class="close pull-right">&times;</a>'),
-      $(this._link).on('click', $.proxy(Notification.onClose, this)),
-      this.$note.prepend(this._link);
-
+      _link = $('<a class="close pull-right">&times;</a>'),
+      _link.on('click', $.proxy(Notification.onClose, this)),
+      this.$note.prepend(_link);
+    
+    if (!this.options.element)
+      this.$note = this.$note.wrap('<div class="notifications ' + this.options.position.replace(/\s+/, '-') + '"/>').parent(),
+      this.$element = $(this.options.appendTo);
+    else
+      this.$element = $(this.options.element);
+    
+    if (this.options.initiallyShown)
+      this.show();
+     
     return this;
   };
 
-  Notification.onClose = function () {
+  Notification.prototype.onClose = function () {
     this.options.onClose();
-    $(this.$note).remove().css("display", "");
+    this.$note.remove();
     this.options.onClosed();
   };
 
   Notification.prototype.show = function () {
     if (this.options.fadeOut.enabled)
-      this.$note.delay(this.options.fadeOut.delay || 3000).fadeOut('slow', $.proxy(Notification.onClose, this));
+      this.$note.delay(this.options.fadeOut.delay || 3000).fadeOut('slow', $.proxy(this.onClose, this));
 
     this.$element.append(this.$note);
     this.$note.alert();
+    return this;
   };
 
   Notification.prototype.hide = function () {
     if (this.options.fadeOut.enabled)
-      this.$note.delay(this.options.fadeOut.delay || 3000).fadeOut('slow', $.proxy(Notification.onClose, this));
-    else Notification.onClose.call(this);
+      this.$note.delay(this.options.fadeOut.delay || 3000).fadeOut('slow', $.proxy(this.onClose, this));
+    else this.onClose();
+    return this;
   };
 
-  $.fn.notify = function (options) {
-    return new Notification(this, options);
+  $.notify = function (options) {
+    return new Notification(options);
+  };
+  
+  $.fn.notify = function(options) {
+    $.notify($.extend(true, {}, options, { element: this }));
   };
 
-  $.fn.notify.defaults = {
+  $.notify.defaults = {
     type: 'success',
+    initiallyShown: true,
+    position: 'top right',
+    appendTo: document.body,
     closable: true,
     transition: 'fade',
     fadeOut: {

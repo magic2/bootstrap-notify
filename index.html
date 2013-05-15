@@ -53,12 +53,12 @@
           <div class="span12">
             <button class='btn btn-warning show-notification'>Click For A Random Notification</button>
           </div>
+          <div class="span12">&nbsp;</div>
+          <div class="span12">
+            <button class='btn btn-warning show-notification-backward'>Click To Test Backward Compatibility</button>
+          </div>
 
           <div class='notifications top-right'></div>
-          <div class='notifications bottom-right'></div>
-          <div class='notifications top-left'></div>
-          <div class='notifications bottom-left'></div>
-          <div class='notifications center'></div>
         </div>
         <div class="span9">
           <div class='page-header'>
@@ -263,7 +263,11 @@
 
       // Basic Features, style isn't even required.
       $('.show-notification').click(function (e) {
-        $('.' + select(example.positions)).notify({ message: { text: select(example.messages) }, type: select(example.styles) }).show();
+        $.notify({ position: select(example.positions), message: { text: select(example.messages) }, type: select(example.styles) });
+      });
+      
+      $('.show-notification-backward').click(function(e) {
+        $('.top-right').notify({ message: { text: select(example.messages) }, type: select(example.styles) });
       });
 
       /* Custom Styles */
@@ -277,7 +281,7 @@
 
         (function(type) {
           $('.show-' + type).click(function (e) {
-            $('.' + select(example.positions)).notify({ message: { text: select(example.messages) }, type: type }).show();
+            $.notify({ position: select(example.positions), message: { text: select(example.messages) }, type: type });
           });
         })(type);
       }
