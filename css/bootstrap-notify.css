@@ -1,32 +1,35 @@
 .notifications {
   position: fixed;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-bottom:0;
 }
 
 /* Positioning */
 .notifications.top-right {
-  right: 10px;
+  right: 25px;
   top: 25px;
 }
 
 .notifications.top-left {
-  left: 10px;
+  left: 25px;
   top: 25px;
 }
 
 .notifications.bottom-left {
-  left: 10px;
+  left: 25px;
   bottom: 25px;
 }
 
 .notifications.bottom-right {
-  right: 10px;
+  right: 25px;
   bottom: 25px;
 }
 
 .notifications.center {
   top: 50%;
-  width: 100%;
-  left: 0;
+  left: 50%;
 }
 
 /* Notification Element */
@@ -34,13 +37,4 @@
   position: relative;
   z-index: 9999;
   margin: 5px 0;
-}
-
-/*
-   Notification width centered is located here.
-*/
-.notifications.center > div {
-  margin: 5px auto;
-  width: 20%;
-  text-align: center;
 }

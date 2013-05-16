@@ -24,6 +24,15 @@
     this.options  = $.extend(true, {}, $.notify.defaults, options);
     var _link     = null;
 
+    if (!this.options.element) {
+      this.$note = $('<div class="notifications ' + this.options.position.replace(/\s+/, '-') + ' alert"/>');
+      if (!this.options.appendTo) {
+          this.options.appendTo = document.body;
+      }
+      this.$element = $(this.options.appendTo);
+    } else
+      this.$element = $(this.options.element);
+      
     // Setup from options
     if (this.options.transition)
       if (this.options.transition === 'fade')
@@ -49,15 +58,6 @@
       _link.on('click', $.proxy(Notification.onClose, this)),
       this.$note.prepend(_link);
     
-    if (!this.options.element) {
-      this.$note = this.$note.wrap('<div class="notifications ' + this.options.position.replace(/\s+/, '-') + '"/>').parent();
-      if (!this.options.appendTo) {
-          this.options.appendTo = document.body;
-      }
-      this.$element = $(this.options.appendTo);
-    } else
-      this.$element = $(this.options.element);
-    
     if (this.options.initiallyShown)
       this.show();
      
@@ -76,6 +76,10 @@
 
     this.$element.append(this.$note);
     this.$note.alert();
+
+    if (this.options.position == 'center')
+      this.$note.css('margin-left', (-this.$note.outerWidth()/2) + 'px');
+
     return this;
   };
 
